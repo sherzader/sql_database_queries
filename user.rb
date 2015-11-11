@@ -1,7 +1,23 @@
 require_relative 'questions_database'
 require_relative 'question'
+require_relative 'reply'
 
 class User
+
+  def self.find_by_id(query_id)
+
+    result_id = QuestionsDatabase.instance.execute(<<-SQL, query_id)
+      SELECT
+       *
+      FROM
+        users
+      WHERE
+        id = ?
+    SQL
+
+    result_id.map { |result_id| User.new(result_id) }.first
+  end
+
   def self.find_by_name(fname, lname)
     result = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
       SELECT
@@ -22,18 +38,10 @@ class User
   end
 
   def authored_questions
-    questions = QuestionsDatabase.instance.execute(<<-SQL, @id)
-      SELECT
-        *
-      FROM
-        questions
-      WHERE
-        author_id = ?
-    SQL
-    questions.map { |question| Question.new(question)  }
+    Question.find_by_author_id(@id)
   end
 
-
-
-
+  def authored_replies
+    Reply.find_by_user_id(@id)
+  end
 end

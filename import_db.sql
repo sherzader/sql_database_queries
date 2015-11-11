@@ -58,3 +58,8 @@ VALUES
   ('HELLO', 'WHAT IS THIS?', 1),
   ('AGE', 'how old are you?', 1),
   ('room', 'why am i here?', 2);
+
+INSERT INTO
+  replies (question_id, user_id, parent_reply, body)
+VALUES
+  (1, 1, NULL, 'You are funny');
